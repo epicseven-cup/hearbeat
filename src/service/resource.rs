@@ -14,5 +14,3 @@ async fn list_resource(state: web::Data<AppState>) -> impl Responder {
     let health = state.resources.lock().unwrap();
     web::Json(health.clone())
 }
-
-

@@ -4,7 +4,8 @@ mod service;
 use std::collections::HashMap;
 use std::sync::Mutex;
 use actix_web::{web, App, HttpServer, Responder, HttpResponse, post, get};
-
+use actix_web::rt::time::interval;
+use actix_web::web::head;
 
 struct AppState {
     resources: Mutex<HashMap<String, bool>>
@@ -25,6 +26,17 @@ async fn echo(req_body: String) -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+
+
+    let share_state = web::Data::new(AppState {
+        resources: Mutex::new(HashMap::new())
+    });
+
+
+
+
+
+
     HttpServer::new(|| {
         App::new()
             .service(hello)

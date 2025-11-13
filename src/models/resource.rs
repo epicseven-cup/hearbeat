@@ -5,8 +5,3 @@ use serde::{Deserialize, Serialize};
 pub struct Resource {
     pub uri: String,
 }
-
-#[derive(Debug, Deserialize, Serialize)]
-pub struct ListResource {
-    pub uri: String,
-}
