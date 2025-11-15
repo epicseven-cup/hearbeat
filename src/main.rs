@@ -5,18 +5,13 @@ use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use actix_web::{web, App, HttpServer, Responder, HttpResponse, post, get};
 use actix_web::rt::time::interval;
-use actix_web::web::head;
+use actix_web::web::{head, resource};
 use tokio::task;
 
 struct AppState {
     resources: Mutex<HashMap<String, bool>>
 }
 
-
-#[get("/")]
-async fn hello() -> impl Responder {
-    HttpResponse::Ok().body("Hello world!")
-}
 
 #[post("/echo")]
 async fn echo(req_body: String) -> impl Responder {
@@ -50,7 +45,8 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(share_state.clone()))
-            .service(hello)
+            .route("/add-resource", web::post().to(service::resource::add_resource))
+            .route("/show-resource", web::get().to(service::resource::list_resource))
             .service(echo)
     })
         .bind("127.0.0.1:8080")?
